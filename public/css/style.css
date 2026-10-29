@@ -1,0 +1,1874 @@
+
+:root {
+    --bg-dark: #151922;
+    --bg-card: #1c2230;          
+    --accent-gold: #EADBBA;      
+    --accent-gold-hover: #cda248;
+    --text-main: #f0f0f0;
+    --text-muted: #9aa0a6;
+    --border-color: #2a3346;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth; /* smooth scrolling  */
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    line-height: 1.6;
+}
+/*  HEADER AND NAVIGATION  */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 2rem;
+    background-color: #0d1017;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    display:flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.brand img {
+    height: 50px; 
+    width: 500;
+    display: block;
+}
+
+.brand h1 {
+    font-size: 1.5rem;
+    color: #EADBBA;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+}
+
+nav { 
+    display:flex; 
+    align-items:center;
+    gap:1rem;
+
+}
+
+nav a {
+    color:var(--text-muted);
+    text-decoration:none;
+    font-weight:500;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    padding:0.5rem 0.75rem;
+    position:relative;
+    transition: color 0.2s ease;
+}
+
+nav a:hover,
+nav a.active {
+    color:var(--accent-gold);
+}
+
+nav a::after {
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:2px;
+    background-color:var(--accent-gold);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform 0.3s ease;
+}
+
+nav a:hover::after,
+nav a.active::after {
+    transform:scaleX(1);
+    transform-origin:left;
+}
+
+.auth-buttons {
+    display:flex;
+    gap:1rem;
+}
+
+.auth-buttons button {
+    background:transparent; 
+    border:1px solid var(--accent-gold);
+    color:var(--accent-gold);
+    padding:0.5rem 1rem;
+    font-size:0.75rem;
+    font-weight:600;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+#login-btn {
+    background:var(--accent-gold); 
+    border:none;
+    color:var(--bg-dark);
+    padding:0.5rem 1rem;
+    font-size:0.75rem;
+    font-weight:600;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+#login-btn:hover {
+    background:transparent;
+    color:var(--accent-gold);
+    border:1px solid var(--accent-gold);
+}
+.auth-buttons button:hover {
+    background: var(--accent-gold);
+    color: var(--bg-dark);
+    
+}
+
+#title-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10rem 5rem; /* banner area */
+    
+     /* readable overlay of background */
+    background: linear-gradient(rgba(21, 25, 34, 0.75), rgba(21, 25, 34, 0.95)), 
+                     url("../images/background.png") center/cover no-repeat;
+    
+    border-bottom: 1px solid var(--border-color);
+    gap: 1.25rem;
+}
+
+#title-card img {
+    max-width: 500px;
+    height: auto;
+    margin-bottom: 1rem;
+
+}
+
+#title-card h1 {
+    font-size: 2rem;
+    color: #EADBBA; 
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#title-card p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+/*  button archive style  */
+
+.ent-button {
+    background: #EADBBA;
+    border: none;
+    color: var(--bg-dark);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ent-button:hover {
+    background-color: var(--accent-gold-hover);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+
+ /*  tier list section  */
+ #tier-list {
+    text-align: center;
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#tier-list h2 {
+    font-size: 2rem;
+    color: var(--accent-gold); 
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+}
+
+#tier-list p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* 1. Define olumn grid */
+.tier-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* 2. Force S Tier to span across both of those columns */
+.tier-s {
+    grid-column: 1 / -1; 
+}
+
+/* 3. Style the cards */
+.tier-hero {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 3.5rem 1.25rem 1.25rem 1.25rem; /* Top padding leaves space for label & line */
+    position: relative; /* Allows absolute positioning for inner labels */
+    min-height: 180px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem; /* Spacing between future hero icons */
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.tier-label {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.5rem;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.hero-items-container {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Forces icons to start from the left */
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem; /* Sits nicely below the divider line */
+}
+    
+  
+.tier-hero::before {
+    content: '';
+    position: absolute;
+    top: 3rem; 
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+
+/* Stacked Row Layout specifically for tierlist.php */
+.tier-container-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Forces space between rows */
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.tier-s { border-left: 6px solid #ff4655; }
+.tier-s .tier-label { color: #ff4655; }
+
+.tier-a { border-left: 6px solid #ff9900; }
+.tier-a .tier-label { color: #ff9900; }
+
+ .tier-b { border-left: 6px solid #ffd54f; }
+.tier-b .tier-label { color: #ffd54f; }
+
+.tier-c { border-left: 6px solid #cd7f32; }
+.tier-c .tier-label { color: #cd7f32; }
+
+.tier-d { border-left: 6px solid #6b7280; }
+.tier-d .tier-label { color: #6b7280; }
+
+/* Hover effect */
+.tier-hero:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* "tier list button */
+.tier-button {
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+    padding: 0.8rem 2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tier-button:hover {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+}
+
+#items {
+    text-align: center;
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 10px     auto;
+}
+
+#items h2 {
+    font-size: 2rem;
+    color: var(--accent-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 5rem;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:1.5rem;
+}
+
+.item-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    text-align: left;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover effect */
+.item-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-gold);
+}
+
+/* Card Titles */
+.item-card h3 {
+    color: var(--accent-gold);
+    font-size: 1.25rem;
+    text-align: justify;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card Descriptions */
+.item-card p {
+    text-align: justify;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Pushes the button to the bottom evenly across all cards */
+}
+
+/* iTEM ICON STYLING */
+.item-icon {
+    width: 48px;               /* scaled down slightly to look better inline */
+    height: 48px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: #0d1017;
+    padding: 4px;
+    flex-shrink: 0;            /* prevents the icon from squeezing */
+}
+
+.item-card h3 {
+    color:var(--accent-gold);
+    font-size: 1.25rem;
+    margin: 0;                 /* Removed margin since item-header handles spacing */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+/* aligns icon and title horizontally */
+.item-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.item-card:hover .item-icon {
+    border-color: var(--accent-gold);
+}
+
+/* View Builds Button */
+.build-button {
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+    padding: 0.6rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: 100%; /* stretches button across the bottom of the card */
+}
+
+.build-button:hover {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+}
+
+/*  hire coaches styling */
+#coach {
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom:90px
+    
+}
+
+#coach h2 {
+    font-size: 2rem;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+}
+
+/* grid */
+.coach-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5rem;
+    margin-top: 3rem;
+}
+
+
+.coach-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.5rem;
+    text-align: left;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.coach-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-gold);
+}
+
+
+.coach-image {
+    width: 190px;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+/* text and button */
+.coach-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* typography */
+.coach-card h3 {
+    color: var(--text-main);
+    font-size: 1.15rem;
+    font-weight: normal;
+    margin: 0 0 0.2rem 0;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.coach-role {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+}
+
+.coach-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+}
+
+
+.coach-button {
+    background-color: var(--accent-gold);
+    border: none;
+    color: var(--bg-dark);
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: max-content; 
+}
+
+.coach-button:hover {
+    background-color: var(--accent-gold-hover);
+}
+
+
+
+#contact {
+    background-color: var(--border-color);
+    padding: 5rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom:50px;
+}
+
+#contact h2 {
+    font-size: 2rem;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+}
+
+#contact p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+#contact input,
+#contact textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+#contact input::placeholder,
+#contact textarea::placeholder {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+#contact button[type="submit"] {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: background-color 0.2s ease;
+}
+
+#contact button[type="submit"]:hover {
+    background-color: var(--accent-gold-hover);
+}
+
+/*finally its the last */
+
+footer {
+    background-color: #0d1017;
+    border-top: 1px solid var(--border-color);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.footer-brand {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent-gold);
+    letter-spacing: 1.5px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent-gold);
+}
+
+footer p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+/* ==========================================
+   MOCKUP-EXACT COACHES LAYOUT STYLING
+   ========================================== */
+
+.coaches-container {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem; /* Proper spacing between the 3 sections */
+}
+
+.section-title {
+    color: var(--accent-gold);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+/* --- SECTION 1: FEATURED COACH --- */
+.featured-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.featured-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    border-right: 1px solid var(--border-color);
+    padding-right: 1.5rem;
+}
+
+.badge-number1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 800;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.featured-avatar {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    border: 2px solid var(--border-color);
+}
+
+.featured-profile h3 {
+    font-size: 1.4rem;
+    color: var(--text-main);
+}
+
+.coach-meta {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+.featured-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.banner-crop img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.featured-bio {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.session-row {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.session-row:hover {
+    border-color: var(--accent-gold);
+    background-color: rgba(234, 179, 8, 0.08);
+    transform: translateX(4px);
+    box-shadow: 0 2px 10px rgba(234, 179, 8, 0.15);
+}
+
+.session-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+
+}
+
+.book-btn {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.book-btn:hover {
+    background-color: #ffd700;
+    transform: translateY(-1px);
+}
+
+.sub-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.price-pill {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.price-text {
+    background: transparent;
+    color: var(--accent-gold);
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.featured-reviews {
+    border-left: 1px solid var(--border-color);
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.featured-reviews h4 {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+}
+
+.review-item {
+    background-color: var(--bg-dark);
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.rev-rating {
+    background-color: #22c55e;
+    color: #000;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+}
+
+.rev-user {
+    color: var(--text-main);
+}
+
+.rev-time {
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    margin-left: auto;
+}
+
+/* --- SECTION 2: PRO COACHES (GRID) --- */
+.pro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.pro-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.pro-card-header {
+    position: relative;
+}
+
+.pro-banner-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.rank-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    font-weight: 800;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+.pro-card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.pro-user-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.pro-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.pro-bio {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.session-row.compact {
+    padding: 0.6rem 0.8rem;
+}
+
+/* --- SECTION 3: COMMUNITY COACHES (ROWS) --- */
+.community-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.community-row {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover highlight effect */
+.community-row:hover {
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.12);
+}
+
+.comm-action {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.comm-rank {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    width: 25px;
+}
+
+.comm-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.comm-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.comm-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.comm-header h4 {
+    color: var(--text-main);
+    font-size: 1.05rem;
+}
+
+.comm-bio {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+}
+
+.comm-packages {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.package-tag {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tag-price {
+    color: var(--accent-gold);
+}
+
+/* Responsive adjustments */
+@media (max-width: 950px) {
+    .featured-card {
+        grid-template-columns: 1fr;
+    }
+    .pro-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Fix link wrapping around header buttons */
+.auth-buttons a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.auth-buttons a button {
+    pointer-events: none;
+}
+
+/* Alert Message Boxes */
+.alert-error {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    border: 1px solid #ff4d4d;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+
+.alert-success {
+    color: #4dff88;
+    background: rgba(77, 255, 136, 0.1);
+    border: 1px solid #4dff88;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Auth & Booking Form Cards */
+.auth-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-dark);
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+/* My Bookings List Card */
+.booking-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.booking-item-card:hover {
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+}
+
+.booking-status-pill {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    background: rgba(234, 179, 8, 0.15);
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+/* ==========================================
+   COACHES PAGE STYLES
+   ========================================== */
+.review-item p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.pro-card-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.pro-card-rating,
+.comm-rating {
+    font-size: 0.8rem;
+    color: var(--accent-gold);
+}
+
+.pro-bio {
+    margin-top: 0.75rem;
+}
+
+.session-row.compact {
+    margin-top: auto;
+}
+
+.compact-session-title {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.comm-action .price-text {
+    font-size: 1rem;
+    font-weight: 400; 
+    color: var(--accent-gold);
+    text-align: center;
+}
+
+.comm-header h4 {
+    margin: 0;
+}
+
+.comm-bio {
+    margin: 0;
+}
+
+/* ==========================================
+   BOOKING CANCELLATION STYLES
+   ========================================== */
+
+.booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-1px);
+}
+
+.booking-status-pill.cancelled {
+    background: rgba(220, 53, 69, 0.15);
+    color: #ff4d4d;
+}
+
+/* ==========================================
+   MY BOOKINGS DASHBOARD STYLES
+   ========================================== */
+
+.booking-title {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-1px);
+}
+
+.booking-status-pill.cancelled {
+    background: rgba(220, 53, 69, 0.15);
+    color: #ff4d4d;
+}
+
+/* ==========================================
+   PROFILE & BOOKINGS DASHBOARD STYLES
+   ========================================== */
+
+.profile-card {
+    background: var(--card-bg, #12151c);
+    border: 1px solid var(--border-color, #2a2e3d);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent-gold, #f39c12);
+    color: #0d0f14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.profile-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.4rem;
+    color: #ffffff;
+}
+
+.profile-info p {
+    margin: 0;
+    color: var(--text-muted, #8a8d9b);
+    font-size: 0.9rem;
+}
+
+.booking-title {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-1px);
+}
+
+.booking-status-pill.cancelled {
+    background: rgba(220, 53, 69, 0.15);
+    color: #ff4d4d;
+}
+
+/* ==========================================
+   USER PROFILE SECTION
+   ========================================== */
+.profile-card {
+    background: var(--card-bg, #12151c);
+    border: 1px solid var(--border-color, #2a2e3d);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-gold, #f39c12);
+    color: #0d0f14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.profile-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.3rem;
+    color: #ffffff;
+}
+
+.profile-info p {
+    margin: 0;
+    color: var(--text-muted, #8a8d9b);
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+   ADMIN DASHBOARD STYLES
+   ========================================== */
+
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--card-bg, #12151c);
+    border: 1px solid var(--border-color, #2a2e3d);
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-gold, #f39c12);
+    margin-top: 0.5rem;
+}
+
+.admin-table-wrapper {
+    background: var(--card-bg, #12151c);
+    border: 1px solid var(--border-color, #2a2e3d);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-table th, 
+.admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color, #2a2e3d);
+}
+
+.admin-table th {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted, #8a8d9b);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.btn-approve {
+    background-color: #198754;
+    color: #ffffff;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-approve:hover {
+    background-color: #157347;
+}
+
+.admin-action-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ==========================================
+   AUTHENTICATION & LOGIN STYLES
+   ========================================== */
+.auth-container {
+    max-width: 450px;
+    margin: 3rem auto;
+}
+
+.auth-error-box {
+    color: #ff4d4d;
+    background: rgba(255, 0, 0, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.auth-error-text {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-label {
+    font-size: 0.85rem;
+    color: var(--text-muted, #8a8d9b);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #2a2e3d);
+    background: var(--bg-card, #12151c);
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.auth-submit-btn {
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* ==========================================
+   AUTHENTICATION & CARD STYLES
+   ========================================== */
+.auth-wrapper {
+    max-width: 450px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.auth-card {
+    background: #12151c;
+    border: 1px solid #2a2e3d;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.auth-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    color: #ffffff;
+    text-align: center;
+}
+
+.auth-error-box {
+    color: #ff4d4d;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.25rem;
+}
+
+.auth-error-text {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.auth-label {
+    font-size: 0.85rem;
+    color: #8a8d9b;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #2a2e3d;
+    background: #0d0f14;
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: #f39c12;
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 0.85rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #f39c12;
+    color: #0d0f14;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.auth-submit-btn:hover {
+    background-color: #d68710;
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   AUTHENTICATION & FORM STYLES
+   ========================================== */
+
+.auth-card {
+    max-width: 450px;
+    margin: 0 auto 3rem auto;
+    background: var(--card-bg, #12151c);
+    border: 1px solid var(--border-color, #2a2e3d);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-muted, #8a8d9b);
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #2a2e3d);
+    background: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--accent-gold, #f39c12);
+}
+
+.book-btn.full-width {
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* ==========================================
+   AUTH PAGE FIXES (LOGIN & REGISTER)
+   ========================================== */
+
+/* Centered section title with constrained underline */
+.section-title.auth-title {
+    text-align: center;
+    border-bottom: none;
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-title.auth-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+/* Center card container and fix width */
+.auth-card {
+    max-width: 450px !important;
+    width: 100%;
+    margin: 0 auto 3rem auto !important;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+}
+
+/* Make submit button stretch full width inside auth forms */
+.auth-card .book-btn {
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    display: block;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+/* Centered section title with constrained underline and gold text */
+.section-title.auth-title {
+    text-align: center;
+    border-bottom: none;
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    color: var(--accent-gold);  
+}
+
+.section-title.auth-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   COACHING PRICE STYLES (GOLD TEXT, NO BOX)
+   ========================================== */
+.price-pill,
+.price-text,
+.tag-price,
+.session-price,
+.package-tag .tag-price {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--accent-gold) !important;
+    font-weight: 500 !important;
+    font-size: 1rem;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================
+   ALERT MESSAGES
+   ========================================== */
+.alert-error {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    border: 1px solid #ff4d4d;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+
+.alert-error p { margin: 0; }
+
+.alert-success {
+    color: #4dff88;
+    background: rgba(77, 255, 136, 0.1);
+    border: 1px solid #4dff88;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.alert-success p { margin: 0; }
+
+/* ==========================================
+   FORM COLUMN UTILITY (replaces inline flex on form groups)
+   ========================================== */
+.form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-col label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-col input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-dark);
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+   ADMIN STAT CARDS
+   ========================================== */
+.stat-card {
+    background: rgba(22, 27, 38, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card h4 {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+.stat-value.color-white    { color: #ffffff; }
+.stat-value.color-pending  { color: #ffb703; }
+.stat-value.color-approved { color: #4caf50; }
+
+/* ==========================================
+   ADMIN DASHBOARD TABLE WRAPPER
+   ========================================== */
+.admin-table-wrap {
+    background: rgba(22, 27, 38, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1.5rem;
+    overflow-x: auto;
+}

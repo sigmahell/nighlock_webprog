@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login - NightLock{% endblock %}
+
+{% block body %}
+<div style="padding: 3rem 1.5rem;">
+    <h2 class="section-title auth-title">SIGN IN TO NIGHTLOCK</h2>
+
+    <div class="auth-card">
+        {% if error is defined and error %}
+            <div class="alert-error">
+                <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            </div>
+        {% endif %}
+
+        <form method="post" action="{{ path('app_login') }}">
+            <div class="form-group">
+                <label for="username">Email / Username</label>
+                <input type="text" id="username" name="_username" value="{{ last_username|default('') }}" required autofocus autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="_password" required autocomplete="current-password">
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="book-btn full-width" style="border: none; cursor: pointer; padding: 0.85rem;">SIGN IN</button>
+        </form>
+
+        <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+            Don't have an occult account yet? 
+            <a href="{{ path('app_register') }}" style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">Register here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

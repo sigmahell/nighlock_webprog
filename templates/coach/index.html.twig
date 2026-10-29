@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Coaching Sessions - NightLock{% endblock %}
+
+{% block body %}
+<div class="coaches-container">
+
+    <!-- Section 1: Featured Coach -->
+    <section id="featured-coach">
+        <h2 class="section-title">FEATURED HEAD COACH</h2>
+        <div class="featured-card">
+            <!-- Col 1: Profile -->
+            <div class="featured-profile">
+                <span class="badge-number1">#1 TOP COACH</span>
+                <img src="{{ asset(featured.avatar) }}" alt="{{ featured.name }}" class="featured-avatar">
+                <h3>{{ featured.name }}</h3>
+                <span class="coach-meta">{{ featured.role }}</span>
+            </div>
+
+            <!-- Col 2: Details & Sessions -->
+            <div class="featured-details">
+                <div class="banner-crop">
+                    <img src="{{ asset(featured.banner) }}" alt="Coach Banner">
+                </div>
+                <p class="featured-bio">{{ featured.bio }}</p>
+                <div class="session-list">
+                    {% for session in featured.sessions %}
+                        <div class="session-row">
+                            <div class="session-info">
+                                <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem;">{{ session.title }}</h4>
+                                <span class="sub-text">{{ session.desc }}</span>
+                            </div>
+                            <div class="session-action">
+                                <span class="price-text">{{ session.price }}</span>
+                                <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK NOW</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Col 3: Reviews -->
+            <div class="featured-reviews">
+                <h4>STUDENT REVIEWS</h4>
+                {% for review in featured.reviews %}
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong class="rev-user">{{ review.user }}</strong>
+                            <span class="rev-rating">{{ review.rating }} ★</span>
+                            <span class="rev-time">{{ review.time }}</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">"{{ review.text }}"</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Pro Coaches Grid -->
+    <section id="pro-coaches">
+        <h2 class="section-title">PRO COACHES</h2>
+        <div class="pro-grid">
+            {% for coach in pro_coaches %}
+                <div class="pro-card">
+                    <div class="pro-card-header">
+                        <img src="{{ asset(coach.banner) }}" alt="Banner" class="pro-banner-img">
+                        <span class="rank-badge">#{{ coach.rank }}</span>
+                    </div>
+                    <div class="pro-card-body">
+                        <div class="pro-user-row">
+                            <img src="{{ asset(coach.avatar) }}" alt="{{ coach.name }}" class="pro-avatar">
+                            <div>
+                                <h3 class="pro-card-title">{{ coach.name }}</h3>
+                                <span class="pro-card-rating">{{ coach.rating }}</span>
+                            </div>
+                        </div>
+                        <p class="pro-bio" style="margin-top: 0.75rem;">{{ coach.bio }}</p>
+                        <div class="session-row compact" style="margin-top: auto;">
+                            <div>
+                                <span class="compact-session-title">1-on-1 Coaching</span>
+                                <div class="price-text" style="font-size: 0.85rem;">{{ coach.price }}</div>
+                            </div>
+                            <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Section 3: Community Coaches List -->
+    <section id="community-coaches">
+        <h2 class="section-title">COMMUNITY MENTORS</h2>
+        <div class="community-list">
+            {% for coach in community_coaches %}
+                <div class="community-row">
+                    <span class="comm-rank">{{ coach.rank }}</span>
+                    <img src="{{ asset(coach.avatar) }}" alt="{{ coach.name }}" class="comm-avatar">
+                    <div class="comm-main">
+                        <div class="comm-header">
+                            <h4>{{ coach.name }}</h4>
+                            <span class="comm-rating">{{ coach.rating }}</span>
+                        </div>
+                        <p class="comm-bio">{{ coach.bio }}</p>
+                    </div>
+                    <div class="comm-action">
+                        <span class="price-text">{{ coach.price }}</span>
+                        <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

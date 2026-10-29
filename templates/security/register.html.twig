@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - NightLock{% endblock %}
+
+{% block body %}
+<div style="padding: 3rem 1.5rem;">
+    <h2 class="section-title auth-title">CREATE AN OCCULT ACCOUNT</h2>
+
+    <div class="auth-card">
+        <form method="post" action="{{ path('app_register') }}">
+            <div class="form-group">
+                <label for="username">Username / Call Sign</label>
+                <input type="text" id="username" name="username" placeholder="e.g. OccultVanguard" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="player@nightlock.gg" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <button type="submit" class="book-btn full-width" style="border: none; cursor: pointer; padding: 0.85rem;">JOIN NIGHTLOCK</button>
+        </form>
+
+        <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+            Already registered? 
+            <a href="{{ path('app_login') }}" style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">Sign in</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

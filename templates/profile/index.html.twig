@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile - NightLock{% endblock %}
+
+{% block body %}
+<div style="max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem;">
+    <h2 class="section-title">MY OCCULT PROFILE</h2>
+
+    <div class="profile-card">
+        <div class="profile-avatar-circle">
+            {{ user.initial }}
+        </div>
+        <div class="profile-info">
+            <h3>{{ user.username }}</h3>
+            <p>{{ user.email }} • Member since {{ user.member_since }}</p>
+        </div>
+    </div>
+
+    <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem 0; font-size: 1.2rem;">SCHEDULED COACHING SESSIONS</h3>
+    
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for booking in bookings %}
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h4 class="booking-title">{{ booking.session }}</h4>
+                    <p style="margin: 0; color: var(--accent-gold); font-size: 0.85rem;">Coach: {{ booking.coach }} ({{ booking.role }})</p>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Scheduled: {{ booking.date }}</span>
+                </div>
+                <div class="booking-actions">
+                    <span style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">{{ booking.status }}</span>
+                    <button type="button" class="btn-cancel" onclick="alert('Session cancellation request submitted.');">Cancel</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

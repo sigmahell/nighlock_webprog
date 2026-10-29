@@ -1,0 +1,36 @@
+{% set current_route = app.current_route %}
+<header>
+    <!-- Brand Logo & Title -->
+    <div class="brand"> 
+        <a href="{{ is_granted('ROLE_ADMIN') ? path('app_admin_dashboard') : path('app_home') }}">
+            <img src="{{ asset('images/logo.png') }}" alt="NightLock Logo">
+        </a>
+        <h1>NIGHTLOCK</h1>
+    </div>
+            
+    <!-- Main Navigation (Only shown to regular users and visitors) -->
+    {% if not is_granted('ROLE_ADMIN') %}
+    <nav class="nav-links">
+        <a href="{{ path('app_home') }}" class="{{ current_route == 'app_home' ? 'active' : '' }}">HOME</a>
+        <a href="{{ path('app_tierlist') }}" class="{{ current_route == 'app_tierlist' ? 'active' : '' }}">TIER LIST</a>
+        <a href="{{ path('app_home') }}#items">ITEMS</a>
+        <a href="{{ path('app_coaches') }}" class="{{ current_route == 'app_coaches' ? 'active' : '' }}">COACHING</a>
+        <a href="{{ path('app_home') }}#contact">CONTACT</a>
+    </nav>
+    {% endif %}
+            
+    <!-- Dynamic Auth Buttons -->
+    <div class="auth-buttons"> 
+        {% if app.user %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_dashboard') }}"><button type="button" id="login-btn">ADMIN DASHBOARD</button></a>
+            {% else %}
+                <a href="{{ path('app_profile') }}"><button type="button" id="login-btn">MY PROFILE</button></a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}"><button type="button">LOGOUT</button></a>
+        {% else %}
+            <a href="{{ path('app_login') }}"><button type="button" id="login-btn">LOGIN</button></a>
+            <a href="{{ path('app_register') }}"><button type="button">REGISTER</button></a>
+        {% endif %}
+    </div>
+</header>

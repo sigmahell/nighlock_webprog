@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NightLock - Your Occult Tracker for Deadlock{% endblock %}
+
+{% block body %}
+    <!-- Hero Title Card -->
+    <section id="title-card">
+        <a href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo2.png') }}" alt="NightLock Logo">
+        </a>
+
+        <div>
+            <h1>Welcome to NightLock</h1>
+        </div>
+        <div>
+            <p>Your occult go-to resource for Deadlock match tracking, tier lists, and forbidden hero statistics. Uncover the truths hidden in the shadows.</p>
+        </div>
+    </section>
+
+    <!-- Hero Tier List Section -->
+    <section id="tier-list">
+        <h2>HERO TIER LIST</h2>
+        <p>Check out tier lists for the best occult strategies in Deadlock.</p>
+
+        <div class="tier-container">
+            <!-- S TIER -->
+            <div class="tier-hero tier-s">
+                <span class="tier-label">S TIER</span>
+                <div class="hero-items-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for hero in s_tier_heroes %}
+                        <div class="hero-badge">
+                            <img src="{{ asset(hero.img) }}" alt="{{ hero.name }}" title="{{ hero.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- A TIER -->
+            <div class="tier-hero tier-a">
+                <span class="tier-label">A TIER</span>
+                <div class="hero-items-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for hero in a_tier_heroes %}
+                        <div class="hero-badge">
+                            <img src="{{ asset(hero.img) }}" alt="{{ hero.name }}" title="{{ hero.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- B TIER -->
+            <div class="tier-hero tier-b">
+                <span class="tier-label">B TIER</span>
+                <div class="hero-items-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for hero in b_tier_heroes %}
+                        <div class="hero-badge">
+                            <img src="{{ asset(hero.img) }}" alt="{{ hero.name }}" title="{{ hero.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ path('app_tierlist') }}" class="tier-button" style="text-decoration: none; display: inline-block;">VIEW FULL TIER LIST</a>
+    </section>
+
+    <!-- Items and Item Builds Section -->
+    <section id="items">
+        <h2>ITEMS AND ITEM BUILDS</h2>
+        <div class="item-grid">
+            {% for item in items %}
+                <div class="item-card">
+                    <div class="item-header">
+                        <img src="{{ asset(item.icon) }}" alt="{{ item.name }}" class="item-icon">
+                        <h3>{{ item.name }}</h3>
+                    </div>
+                    <p>{{ item.description }}</p>
+                    <button type="button" class="build-button">VIEW BUILDS</button>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Hire Coaches Section -->
+    <section id="coach">
+        <h2>HIRE PRO COACHES</h2>
+        <div class="coach-grid">
+            {% for coach in coaches %}
+                <div class="coach-card">
+                    <img src="{{ asset(coach.image) }}" alt="{{ coach.name }}" class="coach-image">
+                    <div class="coach-content">
+                        <h3>{{ coach.name }}</h3>
+                        <span class="coach-role">{{ coach.role }}</span>
+                        <p>{{ coach.bio }}</p>
+                        <a href="{{ path('app_coaches') }}" style="text-decoration: none;">
+                            <button type="button" class="coach-button">BOOK SESSION</button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>CONTACT US</h2>
+        <p>Have questions or feedback? Reach out to us! Don't hesitate to get in touch.</p>
+        <form method="post" action="{{ path('app_home') }}#contact">
+            <input type="text" placeholder="Your Name/Alias" name="name" required>
+            <input type="email" placeholder="Your Email" name="email" required>
+            <textarea placeholder="INQUIRY" rows="5" name="message" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+{% endblock %}
