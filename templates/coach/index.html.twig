@@ -5,112 +5,215 @@
 {% block body %}
 <div class="coaches-container">
 
-    <!-- Section 1: Featured Coach -->
-    <section id="featured-coach">
-        <h2 class="section-title">FEATURED HEAD COACH</h2>
-        <div class="featured-card">
-            <!-- Col 1: Profile -->
-            <div class="featured-profile">
-                <span class="badge-number1">#1 TOP COACH</span>
-                <img src="{{ asset(featured.avatar) }}" alt="{{ featured.name }}" class="featured-avatar">
-                <h3>{{ featured.name }}</h3>
-                <span class="coach-meta">{{ featured.role }}</span>
-            </div>
-
-            <!-- Col 2: Details & Sessions -->
-            <div class="featured-details">
-                <div class="banner-crop">
-                    <img src="{{ asset(featured.banner) }}" alt="Coach Banner">
-                </div>
-                <p class="featured-bio">{{ featured.bio }}</p>
-                <div class="session-list">
-                    {% for session in featured.sessions %}
-                        <div class="session-row">
-                            <div class="session-info">
-                                <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem;">{{ session.title }}</h4>
-                                <span class="sub-text">{{ session.desc }}</span>
+    {# ================================================
+       SECTION 1: FEATURED COACHES
+    ================================================ #}
+    <section id="featured-coaches">
+        <h2 class="section-title">FEATURED HEAD COACHES</h2>
+        {% if featured_coaches is empty %}
+            <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+                No featured coaches available at this time.
+            </p>
+        {% else %}
+            {% for coach in featured_coaches %}
+                <div class="featured-card">
+                    {# Col 1: Profile #}
+                    <div class="featured-profile">
+                        <span class="badge-number1">#1 TOP COACH</span>
+                        {% if coach.image %}
+                            <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}" class="featured-avatar">
+                        {% else %}
+                            <div class="featured-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:2.5rem;color:var(--accent-gold);">
+                                {{ coach.name|first|upper }}
                             </div>
-                            <div class="session-action">
-                                <span class="price-text">{{ session.price }}</span>
-                                <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK NOW</a>
+                        {% endif %}
+                        <h3>{{ coach.name }}</h3>
+                        <span class="coach-meta">{{ coach.specialization }}</span>
+                        <span class="coach-meta" style="color: var(--accent-gold); margin-top: 0.25rem;">
+                            ★ {{ coach.rating }}
+                        </span>
+                        <a href="{{ path('app_coach_show', {'id': coach.id}) }}" class="book-btn" style="margin-top: 1rem;">
+                            VIEW PROFILE
+                        </a>
+                    </div>
+
+                    {# Col 2: Bio & Sessions #}
+                    <div class="featured-details">
+                        <p class="featured-bio">{{ coach.bio }}</p>
+                        {% if coach.sessions is not empty %}
+                            <div class="session-list">
+                                {% for session in coach.sessions %}
+                                    <div class="session-row">
+                                        <div class="session-info">
+                                            <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem;">
+                                                {{ session.title }}
+                                            </h4>
+                                            <span class="sub-text">{{ session.durationMinutes }} minutes</span>
+                                        </div>
+                                        <div class="session-action">
+                                            <span class="price-text">{{ session.price }}</span>
+                                            <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn">BOOK NOW</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">No packages listed yet.</p>
+                        {% endif %}
+                    </div>
+
+                    {# Col 3: Hourly Rate & CTA #}
+                    <div class="featured-reviews">
+                        <h4>COACHING RATE</h4>
+                        <p style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 700; margin: 1rem 0;">
+                            {{ coach.hourlyRate ?? 'TBD' }}<span style="font-size: 0.85rem; color: var(--text-muted);"> / hr</span>
+                        </p>
+                        <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn" style="width: 100%; text-align: center;">
+                            BOOK SESSION
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </section>
+
+    {# ================================================
+       SECTION 2: PRO COACHES GRID
+    ================================================ #}
+    <section id="pro-coaches">
+        <h2 class="section-title">PRO COACHES</h2>
+        {% if pro_coaches is empty %}
+            <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+                No pro coaches available at this time.
+            </p>
+        {% else %}
+            <div class="pro-grid">
+                {% for coach in pro_coaches %}
+                    <div class="pro-card">
+                        <div class="pro-card-header">
+                            {% if coach.image %}
+                                <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}" class="pro-banner-img">
+                            {% else %}
+                                <div class="pro-banner-img" style="background: var(--bg-card); display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:var(--accent-gold);">
+                                    {{ coach.name|first|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="pro-card-body">
+                            <div class="pro-user-row">
+                                <div>
+                                    <h3 class="pro-card-title">{{ coach.name }}</h3>
+                                    <span class="pro-card-rating">★ {{ coach.rating }}</span>
+                                </div>
+                            </div>
+                            <p class="pro-bio" style="margin-top: 0.75rem;">
+                                {{ coach.specialization }}
+                            </p>
+                            <div class="session-row compact" style="margin-top: auto;">
+                                <div>
+                                    <span class="compact-session-title">1-on-1 Coaching</span>
+                                    <div class="price-text" style="font-size: 0.85rem;">{{ coach.hourlyRate ?? 'TBD' }}/hr</div>
+                                </div>
+                                <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn">BOOK</a>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Col 3: Reviews -->
-            <div class="featured-reviews">
-                <h4>STUDENT REVIEWS</h4>
-                {% for review in featured.reviews %}
-                    <div class="review-item">
-                        <div class="review-header">
-                            <strong class="rev-user">{{ review.user }}</strong>
-                            <span class="rev-rating">{{ review.rating }} ★</span>
-                            <span class="rev-time">{{ review.time }}</span>
-                        </div>
-                        <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">"{{ review.text }}"</p>
                     </div>
                 {% endfor %}
             </div>
-        </div>
+        {% endif %}
     </section>
 
-    <!-- Section 2: Pro Coaches Grid -->
-    <section id="pro-coaches">
-        <h2 class="section-title">PRO COACHES</h2>
-        <div class="pro-grid">
-            {% for coach in pro_coaches %}
-                <div class="pro-card">
-                    <div class="pro-card-header">
-                        <img src="{{ asset(coach.banner) }}" alt="Banner" class="pro-banner-img">
-                        <span class="rank-badge">#{{ coach.rank }}</span>
-                    </div>
-                    <div class="pro-card-body">
-                        <div class="pro-user-row">
-                            <img src="{{ asset(coach.avatar) }}" alt="{{ coach.name }}" class="pro-avatar">
-                            <div>
-                                <h3 class="pro-card-title">{{ coach.name }}</h3>
-                                <span class="pro-card-rating">{{ coach.rating }}</span>
-                            </div>
-                        </div>
-                        <p class="pro-bio" style="margin-top: 0.75rem;">{{ coach.bio }}</p>
-                        <div class="session-row compact" style="margin-top: auto;">
-                            <div>
-                                <span class="compact-session-title">1-on-1 Coaching</span>
-                                <div class="price-text" style="font-size: 0.85rem;">{{ coach.price }}</div>
-                            </div>
-                            <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <!-- Section 3: Community Coaches List -->
+    {# ================================================
+       SECTION 3: COMMUNITY COACHES LIST
+    ================================================ #}
     <section id="community-coaches">
         <h2 class="section-title">COMMUNITY MENTORS</h2>
-        <div class="community-list">
-            {% for coach in community_coaches %}
-                <div class="community-row">
-                    <span class="comm-rank">{{ coach.rank }}</span>
-                    <img src="{{ asset(coach.avatar) }}" alt="{{ coach.name }}" class="comm-avatar">
-                    <div class="comm-main">
-                        <div class="comm-header">
-                            <h4>{{ coach.name }}</h4>
-                            <span class="comm-rating">{{ coach.rating }}</span>
+        {% if community_coaches is empty %}
+            <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">
+                No community coaches yet — be the first to apply!
+            </p>
+        {% else %}
+            <div class="community-list">
+                {% for coach in community_coaches %}
+                    <div class="community-row">
+                        <img src="{% if coach.image %}{{ asset('images/' ~ coach.image) }}{% else %}{{ asset('images/placeholder-avatar.png') }}{% endif %}"
+                             alt="{{ coach.name }}" class="comm-avatar"
+                             onerror="this.style.display='none'">
+                        <div class="comm-main">
+                            <div class="comm-header">
+                                <h4>{{ coach.name }}</h4>
+                                <span class="comm-rating">★ {{ coach.rating }}</span>
+                            </div>
+                            <p class="comm-bio">{{ coach.specialization }}</p>
                         </div>
-                        <p class="comm-bio">{{ coach.bio }}</p>
+                        <div class="comm-action">
+                            <span class="price-text">{{ coach.hourlyRate ?? 'TBD' }}/hr</span>
+                            <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn">BOOK</a>
+                        </div>
                     </div>
-                    <div class="comm-action">
-                        <span class="price-text">{{ coach.price }}</span>
-                        <a href="{{ path('app_home') }}#contact" class="book-btn">BOOK</a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </section>
+
+    {# ================================================
+       SECTION 4: COACH APPLICATION FORM
+       Only shown if user is logged in and hasn't already applied
+    ================================================ #}
+    {% if app.user %}
+        <section id="coach-apply" style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border-color);">
+            <h2 class="section-title">APPLY TO BECOME A COACH</h2>
+            <p style="color: var(--text-muted); text-align: center; max-width: 600px; margin: 0 auto 2.5rem;">
+                Think you have what it takes? Submit an application and our team will review your credentials.
+                Approved coaches are listed on this page and receive bookings from students worldwide.
+            </p>
+
+            <div style="max-width: 600px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.5rem;">
+                {{ form_start(application_form, {'attr': {'class': 'coach-apply-form', 'novalidate': 'novalidate'}}) }}
+
+                    <div class="form-group">
+                        {{ form_label(application_form.name, 'Display Name', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(application_form.name) }}
+                        {{ form_errors(application_form.name) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(application_form.specialization, 'Specialization', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(application_form.specialization) }}
+                        {{ form_errors(application_form.specialization) }}
+                        <small class="form-hint">e.g. Carry, Support, Offlane, All-rounder</small>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(application_form.hourlyRate, 'Hourly Rate', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(application_form.hourlyRate) }}
+                        {{ form_errors(application_form.hourlyRate) }}
+                        <small class="form-hint">e.g. $15 or Free for first session</small>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(application_form.bio, 'Bio / Credentials', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(application_form.bio) }}
+                        {{ form_errors(application_form.bio) }}
+                        <small class="form-hint">Describe your rank, experience, and coaching style.</small>
+                    </div>
+
+                    <button type="submit" class="book-btn" style="width: 100%; margin-top: 1rem; font-size: 1rem; padding: 0.85rem;">
+                        SUBMIT APPLICATION
+                    </button>
+
+                {{ form_end(application_form) }}
+            </div>
+        </section>
+    {% else %}
+        <section style="margin-top: 3rem; text-align: center; padding: 2rem; border-top: 1px solid var(--border-color);">
+            <h3 style="color: var(--accent-gold);">WANT TO COACH?</h3>
+            <p style="color: var(--text-muted); margin: 0.75rem 0 1.5rem;">
+                Create an account and apply to join our coaching roster.
+            </p>
+            <a href="{{ path('app_register') }}" class="book-btn">CREATE ACCOUNT</a>
+        </section>
+    {% endif %}
 
 </div>
 {% endblock %}

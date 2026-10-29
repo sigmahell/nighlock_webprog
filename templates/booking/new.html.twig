@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book {{ coach.name }} - NightLock{% endblock %}
+
+{% block body %}
+<div style="max-width: 750px; margin: 0 auto; padding: 3rem 1.5rem;">
+
+    {# ── BREADCRUMB ── #}
+    <nav style="margin-bottom: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+        <a href="{{ path('app_coaches') }}" style="color: var(--accent-gold); text-decoration: none;">Coaches</a>
+        <span style="margin: 0 0.5rem; color: var(--border-color);">/</span>
+        <a href="{{ path('app_coach_show', {'id': coach.id}) }}" style="color: var(--accent-gold); text-decoration: none;">{{ coach.name }}</a>
+        <span style="margin: 0 0.5rem; color: var(--border-color);">/</span>
+        <span>Book Session</span>
+    </nav>
+
+    <h2 class="section-title" style="text-align: left;">BOOK A SESSION</h2>
+
+    {# ── COACH SUMMARY CARD ── #}
+    <div style="display: flex; align-items: center; gap: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem;">
+        {% if coach.image %}
+            <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}"
+                 style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold);">
+        {% else %}
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; color: var(--accent-gold); border: 2px solid var(--accent-gold);">
+                {{ coach.name|first|upper }}
+            </div>
+        {% endif %}
+        <div>
+            <h3 style="margin: 0; color: #fff; font-size: 1.1rem;">{{ coach.name }}</h3>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">{{ coach.specialization }}</span>
+            <div style="margin-top: 0.25rem;">
+                <span style="color: var(--accent-gold); font-size: 0.9rem; font-weight: 600;">★ {{ coach.rating }}</span>
+                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.75rem;">
+                    {{ coach.hourlyRate ?? 'TBD' }}/hr
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {# ── BOOKING FORM ── #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.5rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.75rem; font-size: 1rem; letter-spacing: 0.1em;">
+            SESSION DETAILS
+        </h3>
+
+        {{ form_start(form, {'attr': {'class': 'booking-form', 'novalidate': 'novalidate'}}) }}
+
+            {# SESSION PACKAGE #}
+            <div class="form-group">
+                {{ form_label(form.session, 'Coaching Package', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.session) }}
+                {{ form_errors(form.session) }}
+                <small class="form-hint">Select the type of session you want.</small>
+            </div>
+
+            {# SCHEDULE DATE & TIME #}
+            <div class="form-group">
+                {{ form_label(form.scheduledAt, 'Preferred Date & Time', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.scheduledAt) }}
+                {{ form_errors(form.scheduledAt) }}
+                <small class="form-hint">Must be a future date. The coach will confirm or suggest a different time.</small>
+            </div>
+
+            {# CLIENT NOTES #}
+            <div class="form-group">
+                {{ form_label(form.clientNotes, 'Session Goals & Discord', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.clientNotes) }}
+                {{ form_errors(form.clientNotes) }}
+                <small class="form-hint">Your Discord tag is required so the coach can reach you.</small>
+            </div>
+
+            {# DISCLAIMER #}
+            <div style="background: rgba(234,219,186,0.06); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                ⚠️ Submitting this form sends a booking <strong style="color: #fff;">request</strong>.
+                The coach must accept before the session is confirmed. You will receive a notification on your profile.
+            </div>
+
+            <button type="submit" class="book-btn" style="width: 100%; font-size: 1rem; padding: 0.9rem; margin-top: 0.5rem;">
+                SUBMIT BOOKING REQUEST
+            </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    {# ── CANCEL LINK ── #}
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="{{ path('app_coach_show', {'id': coach.id}) }}"
+           style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">
+            ← Cancel and return to coach profile
+        </a>
+    </div>
+
+</div>
+{% endblock %}

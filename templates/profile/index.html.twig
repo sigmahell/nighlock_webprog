@@ -4,34 +4,117 @@
 
 {% block body %}
 <div style="max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem;">
+
     <h2 class="section-title">MY OCCULT PROFILE</h2>
 
-    <div class="profile-card">
-        <div class="profile-avatar-circle">
-            {{ user.initial }}
+    {# ── USER INFO CARD ── #}
+    <div class="profile-card" style="display: flex; align-items: center; gap: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.75rem 2rem; margin-bottom: 2.5rem;">
+        <div class="profile-avatar-circle" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #EADBBA, #8b6914); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; color: #151922; flex-shrink: 0;">
+            {{ app.user.steamName ? app.user.steamName|first|upper : app.user.email|first|upper }}
         </div>
         <div class="profile-info">
-            <h3>{{ user.username }}</h3>
-            <p>{{ user.email }} • Member since {{ user.member_since }}</p>
+            <h3 style="margin: 0 0 0.3rem; color: #fff; font-size: 1.2rem;">
+                {{ app.user.steamName ?? 'Agent' }}
+            </h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 0.875rem;">
+                {{ app.user.email }}
+                {% if app.user.steamId %}
+                    &nbsp;•&nbsp;Steam ID: <span style="color: var(--accent-gold);">{{ app.user.steamId }}</span>
+                {% endif %}
+            </p>
+            <div style="margin-top: 0.5rem;">
+                {% for role in app.user.roles %}
+                    {% if role != 'ROLE_USER' %}
+                        <span style="background: rgba(234,219,186,0.1); color: var(--accent-gold); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+                            {{ role|replace({'ROLE_': ''})|title }}
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 
-    <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem 0; font-size: 1.2rem;">SCHEDULED COACHING SESSIONS</h3>
-    
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-        {% for booking in bookings %}
-            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h4 class="booking-title">{{ booking.session }}</h4>
-                    <p style="margin: 0; color: var(--accent-gold); font-size: 0.85rem;">Coach: {{ booking.coach }} ({{ booking.role }})</p>
-                    <span style="font-size: 0.8rem; color: var(--text-muted);">Scheduled: {{ booking.date }}</span>
+    {# ── BOOKINGS LIST ── #}
+    <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem; font-size: 1.1rem; letter-spacing: 0.05em;">
+        SCHEDULED COACHING SESSIONS
+    </h3>
+
+    {% if bookings is empty %}
+        <div style="background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 10px; padding: 3rem; text-align: center;">
+            <p style="color: var(--text-muted); margin-bottom: 1.25rem;">You haven't booked any coaching sessions yet.</p>
+            <a href="{{ path('app_coaches') }}" class="book-btn">BROWSE COACHES</a>
+        </div>
+    {% else %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for booking in bookings %}
+                {# Determine status badge color #}
+                {% if booking.status == 'accepted' %}
+                    {% set badge_color = '#2ecc71' %}
+                    {% set badge_bg = 'rgba(46, 204, 113, 0.15)' %}
+                {% elseif booking.status == 'pending' %}
+                    {% set badge_color = '#f39c12' %}
+                    {% set badge_bg = 'rgba(243, 156, 18, 0.15)' %}
+                {% elseif booking.status == 'cancelled' %}
+                    {% set badge_color = '#e74c3c' %}
+                    {% set badge_bg = 'rgba(231, 76, 60, 0.15)' %}
+                {% elseif booking.status == 'denied' %}
+                    {% set badge_color = '#e74c3c' %}
+                    {% set badge_bg = 'rgba(231, 76, 60, 0.12)' %}
+                {% else %}
+                    {% set badge_color = '#95a5a6' %}
+                    {% set badge_bg = 'rgba(149, 165, 166, 0.12)' %}
+                {% endif %}
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h4 style="margin: 0 0 0.3rem; color: #fff; font-size: 0.95rem;">
+                            {{ booking.sessionTitle ?? (booking.session ? booking.session.title : 'Session') }}
+                        </h4>
+                        <p style="margin: 0 0 0.2rem; color: var(--accent-gold); font-size: 0.85rem;">
+                            Coach: {{ booking.coach.name }}
+                            <span style="color: var(--text-muted); font-size: 0.8rem;">({{ booking.coach.specialization }})</span>
+                        </p>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">
+                            Scheduled: {{ booking.scheduledAt|date('M d, Y \\a\\t H:i') }}
+                        </span>
+                        {% if booking.clientNotes %}
+                            <p style="margin: 0.4rem 0 0; font-size: 0.8rem; color: var(--text-muted);">
+                                Notes: {{ booking.clientNotes|slice(0, 100) }}{% if booking.clientNotes|length > 100 %}…{% endif %}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="booking-actions" style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                        <span style="background: {{ badge_bg }}; color: {{ badge_color }}; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+                            {{ booking.status }}
+                        </span>
+
+                        {% if booking.price %}
+                            <span style="color: var(--accent-gold); font-size: 0.85rem; font-weight: 600;">
+                                {{ booking.price }}
+                            </span>
+                        {% endif %}
+
+                        {# Only show cancel for pending or accepted bookings #}
+                        {% if booking.status in ['pending', 'accepted'] %}
+                            <form method="post"
+                                  action="{{ path('app_booking_cancel', {'id': booking.id}) }}"
+                                  onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('cancel_booking_' ~ booking.id) }}">
+                                <button type="submit" class="btn-cancel" style="border: none; cursor: pointer; padding: 4px 12px; border-radius: 4px; background: rgba(231,76,60,0.15); color: #e74c3c; font-size: 0.8rem; font-weight: 600;">
+                                    Cancel
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="booking-actions">
-                    <span style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">{{ booking.status }}</span>
-                    <button type="button" class="btn-cancel" onclick="alert('Session cancellation request submitted.');">Cancel</button>
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# ── QUICK LINKS ── #}
+    <div style="margin-top: 3rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{{ path('app_coaches') }}" class="book-btn">BOOK ANOTHER SESSION</a>
     </div>
 </div>
 {% endblock %}

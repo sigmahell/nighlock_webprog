@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ coach.name }} - Coach Profile | NightLock{% endblock %}
+
+{% block body %}
+<div style="max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem;">
+
+    {# ── BREADCRUMB ── #}
+    <nav style="margin-bottom: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+        <a href="{{ path('app_coaches') }}" style="color: var(--accent-gold); text-decoration: none;">← Back to Coaches</a>
+    </nav>
+
+    {# ── HERO / PROFILE HEADER ── #}
+    <div class="featured-card" style="margin-bottom: 3rem;">
+        {# Col 1: Avatar & identity #}
+        <div class="featured-profile">
+            {% if coach.image %}
+                <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}" class="featured-avatar">
+            {% else %}
+                <div class="featured-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:3rem;color:var(--accent-gold);">
+                    {{ coach.name|first|upper }}
+                </div>
+            {% endif %}
+
+            <h2 style="margin: 1rem 0 0.25rem; color: #fff;">{{ coach.name }}</h2>
+            <span class="coach-meta">{{ coach.specialization }}</span>
+
+            <div style="margin-top: 0.75rem;">
+                <span style="color: var(--accent-gold); font-size: 1.1rem; font-weight: 700;">★ {{ coach.rating }}</span>
+            </div>
+
+            <div style="margin-top: 0.5rem;">
+                <span class="badge-number1"
+                      style="{% if coach.tier == 'featured' %}background: linear-gradient(135deg, #EADBBA, #b8986a);{% elseif coach.tier == 'pro' %}background: rgba(234,219,186,0.15);{% else %}background: rgba(255,255,255,0.05);{% endif %}">
+                    {{ coach.tier|upper }}
+                </span>
+            </div>
+
+            <p style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; margin-top: 1.25rem;">
+                {{ coach.hourlyRate ?? 'TBD' }}<span style="font-size: 0.8rem; color: var(--text-muted);"> / hr</span>
+            </p>
+
+            {% if app.user %}
+                <a href="{{ path('app_booking_new', {'id': coach.id}) }}"
+                   class="book-btn"
+                   style="width: 100%; text-align: center; margin-top: 1rem; font-size: 1rem; padding: 0.85rem;">
+                    BOOK A SESSION
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}"
+                   class="book-btn"
+                   style="width: 100%; text-align: center; margin-top: 1rem; opacity: 0.7;">
+                    LOG IN TO BOOK
+                </a>
+            {% endif %}
+        </div>
+
+        {# Col 2: Bio #}
+        <div class="featured-details">
+            <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">ABOUT</h3>
+            <p style="color: var(--text-muted); line-height: 1.75; font-size: 0.95rem;">
+                {{ coach.bio ?? 'This coach has not provided a bio yet.' }}
+            </p>
+
+            {# ── COACHING PACKAGES ── #}
+            {% if coach.sessions is not empty %}
+                <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem;">COACHING PACKAGES</h3>
+                <div class="session-list">
+                    {% for session in coach.sessions %}
+                        <div class="session-row">
+                            <div class="session-info">
+                                <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem;">
+                                    {{ session.title }}
+                                </h4>
+                                <span class="sub-text">{{ session.durationMinutes }} minutes</span>
+                            </div>
+                            <div class="session-action">
+                                <span class="price-text">{{ session.price }}</span>
+                                {% if app.user %}
+                                    <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn">BOOK</a>
+                                {% else %}
+                                    <a href="{{ path('app_login') }}" class="book-btn" style="opacity: 0.65;">LOGIN</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: var(--text-muted); margin-top: 1.5rem; font-size: 0.9rem;">
+                    No coaching packages listed yet. Reach out to book a custom session.
+                </p>
+            {% endif %}
+        </div>
+
+        {# Col 3: Quick Stats #}
+        <div class="featured-reviews">
+            <h4>QUICK INFO</h4>
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">SPECIALIZATION</span>
+                    <strong style="color: #fff;">{{ coach.specialization }}</strong>
+                </div>
+                <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">RATING</span>
+                    <strong style="color: var(--accent-gold);">★ {{ coach.rating }}</strong>
+                </div>
+                <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">PACKAGES AVAILABLE</span>
+                    <strong style="color: #fff;">{{ coach.sessions|length }}</strong>
+                </div>
+                <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">MEMBER SINCE</span>
+                    <strong style="color: #fff;">{{ coach.createdAt|date('M Y') }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── CALL TO ACTION ── #}
+    {% if app.user %}
+        <div style="text-align: center; padding: 2.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
+            <h3 style="color: var(--accent-gold); margin-bottom: 0.75rem;">READY TO LEVEL UP?</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                Book a session with <strong style="color: #fff;">{{ coach.name }}</strong> and start your journey to Immortal rank.
+            </p>
+            <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn" style="font-size: 1rem; padding: 0.9rem 2.5rem;">
+                BOOK SESSION NOW
+            </a>
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Log in to book a session with this coach.</p>
+            <a href="{{ path('app_login') }}" class="book-btn">LOG IN</a>
+            &nbsp;&nbsp;
+            <a href="{{ path('app_register') }}" class="book-btn" style="background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold);">REGISTER</a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
