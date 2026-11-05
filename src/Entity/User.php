@@ -28,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $steamName = null;
 
-    #[ORM\Column(length: 17)]
+    #[ORM\Column(length: 17, nullable: true)]
     private ?string $steamId = null;
 
     #[ORM\Column]

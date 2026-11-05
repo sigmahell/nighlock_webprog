@@ -14,7 +14,6 @@ services:
       - nightlock_db_data:/var/lib/mysql
     networks:
       - nightlock_network
-
   nightlock_phpmyadmin:
     image: phpmyadmin
     container_name: nightlock_phpmyadmin

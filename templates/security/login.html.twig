@@ -7,32 +7,55 @@
     <h2 class="section-title auth-title">SIGN IN TO NIGHTLOCK</h2>
 
     <div class="auth-card">
-        {% if error is defined and error %}
-            <div class="alert-error">
-                <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+
+        {% if error %}
+            <div class="alert-error" style="background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.4); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; color: #e74c3c; font-size: 0.9rem;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
         {% endif %}
 
         <form method="post" action="{{ path('app_login') }}">
+
             <div class="form-group">
-                <label for="username">Email / Username</label>
-                <input type="text" id="username" name="_username" value="{{ last_username|default('') }}" required autofocus autocomplete="username">
+                <label for="username" class="form-label">Email Address</label>
+                <input type="email"
+                       id="username"
+                       name="_username"
+                       class="form-input"
+                       value="{{ last_username }}"
+                       required
+                       autofocus
+                       autocomplete="email"
+                       placeholder="player@nightlock.gg">
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="_password" required autocomplete="current-password">
+                <label for="password" class="form-label">Password</label>
+                <input type="password"
+                       id="password"
+                       name="_password"
+                       class="form-input"
+                       required
+                       autocomplete="current-password"
+                       placeholder="••••••••">
             </div>
 
+            {# CSRF token — required by security.yaml enable_csrf: true #}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <button type="submit" class="book-btn full-width" style="border: none; cursor: pointer; padding: 0.85rem;">SIGN IN</button>
+            <button type="submit" class="book-btn full-width"
+                    style="border: none; cursor: pointer; padding: 0.85rem; margin-top: 0.5rem; width: 100%;">
+                SIGN IN
+            </button>
+
         </form>
 
         <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted);">
-            Don't have an occult account yet? 
-            <a href="{{ path('app_register') }}" style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">Register here</a>
+            Don't have an occult account yet?
+            <a href="{{ path('app_register') }}"
+               style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">Register here</a>
         </div>
+
     </div>
 </div>
 {% endblock %}
