@@ -23,8 +23,8 @@ class CoachApplicationType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please provide a coach display name.']),
-                    new Length(['min' => 2, 'max' => 100]),
+                    new NotBlank(message: 'Please provide a coach display name.'),
+                    new Length(min: 2, max: 100),
                 ],
             ])
             ->add('specialization', TextType::class, [
@@ -34,8 +34,8 @@ class CoachApplicationType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please specify your coaching specialty.']),
-                    new Length(['max' => 100]),
+                    new NotBlank(message: 'Please specify your coaching specialty.'),
+                    new Length(max: 100),
                 ],
             ])
             ->add('hourlyRate', TextType::class, [
@@ -45,7 +45,7 @@ class CoachApplicationType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please provide your expected hourly rate.']),
+                    new NotBlank(message: 'Please provide your expected hourly rate.'),
                 ],
             ])
             ->add('bio', TextareaType::class, [
@@ -56,8 +56,8 @@ class CoachApplicationType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please provide a brief bio describing your experience.']),
-                    new Length(['min' => 20, 'minMessage' => 'Bio should be at least 20 characters.']),
+                    new NotBlank(message: 'Please provide a brief bio describing your experience.'),
+                    new Length(min: 20, minMessage: 'Bio should be at least {{ limit }} characters.'),
                 ],
             ]);
     }

@@ -41,7 +41,7 @@ class BookingType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please select a session package.']),
+                    new NotBlank(message: 'Please select a session package.'),
                 ],
             ])
             ->add('scheduledAt', DateTimeType::class, [
@@ -53,11 +53,11 @@ class BookingType extends AbstractType
                     'class' => 'form-input',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please select a scheduled date and time.']),
-                    new GreaterThan([
-                        'value' => 'now',
-                        'message' => 'Your scheduled session must be in the future.',
-                    ]),
+                    new NotBlank(message: 'Please select a scheduled date and time.'),
+                    new GreaterThan(
+                        value: 'now',
+                        message: 'Your scheduled session must be in the future.'
+                    ),
                 ],
             ])
             ->add('clientNotes', TextareaType::class, [

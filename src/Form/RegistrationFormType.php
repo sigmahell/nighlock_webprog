@@ -28,8 +28,8 @@ class RegistrationFormType extends AbstractType
                     'autofocus'   => true,
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your email.']),
-                    new Email(['message' => 'Please enter a valid email address.']),
+                    new NotBlank(message: 'Please enter your email.'),
+                    new Email(message: 'Please enter a valid email address.'),
                 ],
             ])
             ->add('steamName', TextType::class, [
@@ -39,13 +39,13 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'e.g. OccultVanguard',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your Steam display name.']),
-                    new Length([
-                        'min'        => 2,
-                        'max'        => 100,
-                        'minMessage' => 'Steam name must be at least {{ limit }} characters.',
-                        'maxMessage' => 'Steam name cannot exceed {{ limit }} characters.',
-                    ]),
+                    new NotBlank(message: 'Please enter your Steam display name.'),
+                    new Length(
+                        min: 2,
+                        max: 100,
+                        minMessage: 'Steam name must be at least {{ limit }} characters.',
+                        maxMessage: 'Steam name cannot exceed {{ limit }} characters.'
+                    ),
                 ],
             ])
             ->add('steamId', TextType::class, [
@@ -57,11 +57,10 @@ class RegistrationFormType extends AbstractType
                     'maxlength'   => 17,
                 ],
                 'constraints' => [
-                    new Regex([
-                        'pattern' => '/^\d{17}$/',
-                        'message' => 'Steam ID must be exactly 17 digits.',
-                        'match'   => true,
-                    ]),
+                    new Regex(
+                        pattern: '/^\d{17}$/',
+                        message: 'Steam ID must be exactly 17 digits.'
+                    ),
                 ],
             ])
             // plainPassword is NOT mapped to the entity — we hash it manually
@@ -76,12 +75,12 @@ class RegistrationFormType extends AbstractType
                         'autocomplete' => 'new-password',
                     ],
                     'constraints' => [
-                        new NotBlank(['message' => 'Please enter a password.']),
-                        new Length([
-                            'min'        => 8,
-                            'max'        => 4096,
-                            'minMessage' => 'Password must be at least {{ limit }} characters.',
-                        ]),
+                        new NotBlank(message: 'Please enter a password.'),
+                        new Length(
+                            min: 8,
+                            max: 4096,
+                            minMessage: 'Password must be at least {{ limit }} characters.'
+                        ),
                     ],
                 ],
                 'second_options' => [
