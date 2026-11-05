@@ -1,1 +1,9 @@
-/* NightLock Application Styles */
+@import "tailwindcss";
+
+@theme {
+    --color-occult-dark: #151922;
+    --color-occult-card: #1c2230;
+    --color-occult-gold: #EADBBA;
+    --color-occult-gold-hover: #cda248;
+    --color-occult-border: #2a3346;
+}
