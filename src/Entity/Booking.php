@@ -56,6 +56,9 @@ class Booking
     #[ORM\OneToMany(mappedBy: 'booking', targetEntity: Notification::class, cascade: ['remove'])]
     private Collection $notifications;
 
+    #[ORM\OneToOne(mappedBy: 'booking', targetEntity: Review::class, cascade: ['remove'])]
+    private ?Review $review = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -183,5 +186,16 @@ class Booking
     public function getNotifications(): Collection
     {
         return $this->notifications;
+    }
+
+    public function getReview(): ?Review
+    {
+        return $this->review;
+    }
+
+    public function setReview(?Review $review): static
+    {
+        $this->review = $review;
+        return $this;
     }
 }

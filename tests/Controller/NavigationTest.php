@@ -29,7 +29,7 @@ final class NavigationTest extends WebTestCase
         // 3. Coaches page
         $crawler = $client->request('GET', '/coaches');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#featured-coach h2', 'FEATURED HEAD COACH');
+        $this->assertSelectorTextContains('#featured-coaches h2', 'FEATURED COACH');
         $this->assertSelectorExists('#pro-coaches');
         $this->assertSelectorExists('#community-coaches');
 
@@ -43,14 +43,20 @@ final class NavigationTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'CREATE AN OCCULT ACCOUNT');
 
-        // 6. Admin Dashboard page
+        // 6. Anonymous visitors cannot access the admin dashboard.
         $crawler = $client->request('GET', '/admin');
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'ADMINISTRATOR OCCULT CONTROL');
+        $this->assertResponseRedirects('/login');
 
-        // 7. Profile page
+        // 7. Anonymous visitors cannot access the profile page.
         $crawler = $client->request('GET', '/profile');
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'MY OCCULT PROFILE');
+        $this->assertResponseRedirects('/login');
+
+        // 8. The coach workspace is protected too.
+        $crawler = $client->request('GET', '/coach/dashboard');
+        $this->assertResponseRedirects('/login');
+
+        // 9. Notifications are private to signed-in users.
+        $crawler = $client->request('GET', '/notifications');
+        $this->assertResponseRedirects('/login');
     }
 }

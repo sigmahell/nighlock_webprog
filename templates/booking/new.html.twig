@@ -18,22 +18,21 @@
 
     {# ── COACH SUMMARY CARD ── #}
     <div style="display: flex; align-items: center; gap: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem;">
-        {% if coach.image %}
-            <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}"
-                 style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold);">
-        {% else %}
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; color: var(--accent-gold); border: 2px solid var(--accent-gold);">
-                {{ coach.name|first|upper }}
-            </div>
-        {% endif %}
+        <img src="{{ coach.image ? asset('images/' ~ coach.image) : asset('images/default-avatar.png') }}" alt="{{ coach.name }}"
+             style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold);"
+             onerror="this.onerror=null; this.src='{{ asset('images/default-avatar.png') }}';">
         <div>
             <h3 style="margin: 0; color: #fff; font-size: 1.1rem;">{{ coach.name }}</h3>
             <span style="color: var(--text-muted); font-size: 0.85rem;">{{ coach.specialization }}</span>
-            <div style="margin-top: 0.25rem;">
-                <span style="color: var(--accent-gold); font-size: 0.9rem; font-weight: 600;">★ {{ coach.rating }}</span>
-                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.75rem;">
-                    {{ coach.hourlyRate ?? 'TBD' }}/hr
+            <div style="margin-top: 0.25rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="color: var(--accent-gold); font-size: 0.95rem; font-weight: 700;">
+                    {{ coach.hourlyRate ? (coach.hourlyRate ~ (not ('/hr' in coach.hourlyRate) ? '/hr' : '')) : 'TBD' }}
                 </span>
+                {% if coach.averageRating %}
+                    <span style="color: var(--accent-gold); font-size: 0.85rem;">
+                        ★ {{ coach.averageRating }} ({{ coach.reviews|length }} review{{ coach.reviews|length == 1 ? '' : 's' }})
+                    </span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -45,14 +44,6 @@
         </h3>
 
         {{ form_start(form, {'attr': {'class': 'booking-form', 'novalidate': 'novalidate'}}) }}
-
-            {# SESSION PACKAGE #}
-            <div class="form-group">
-                {{ form_label(form.session, 'Coaching Package', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.session) }}
-                {{ form_errors(form.session) }}
-                <small class="form-hint">Select the type of session you want.</small>
-            </div>
 
             {# SCHEDULE DATE & TIME #}
             <div class="form-group">
@@ -82,6 +73,32 @@
 
         {{ form_end(form) }}
     </div>
+
+    {# ── RECENT REVIEWS ── #}
+    {% if coach.reviews is not empty %}
+        <div style="margin-top: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem;">
+            <h4 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.25rem; font-size: 0.95rem; letter-spacing: 0.05em;">
+                WHAT STUDENTS SAY (★ {{ coach.averageRating }} avg &bull; {{ coach.reviews|length }} review{{ coach.reviews|length == 1 ? '' : 's' }})
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for review in coach.reviews|slice(0, 3) %}
+                    <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                            <span style="color: #fff; font-weight: 600; font-size: 0.85rem;">
+                                {{ review.client.steamName ?? review.client.email }}
+                            </span>
+                            <span style="color: var(--accent-gold); font-size: 0.85rem;">
+                                {% for i in 1..5 %}{% if i <= review.rating %}★{% else %}☆{% endif %}{% endfor %}
+                            </span>
+                        </div>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                            {{ review.comment }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
     {# ── CANCEL LINK ── #}
     <div style="text-align: center; margin-top: 1.5rem;">

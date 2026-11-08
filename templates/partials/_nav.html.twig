@@ -22,8 +22,11 @@
     <!-- Dynamic Auth Buttons -->
     <div class="auth-buttons"> 
         {% if app.user %}
+            <a href="{{ path('app_notifications') }}"><button type="button">NOTIFICATIONS</button></a>
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_admin_dashboard') }}"><button type="button" id="login-btn">ADMIN DASHBOARD</button></a>
+            {% elseif app.user.coachProfile and app.user.coachProfile.status == 'approved' %}
+                <a href="{{ path('app_coach_dashboard') }}"><button type="button" id="login-btn">COACH DASHBOARD</button></a>
             {% else %}
                 <a href="{{ path('app_profile') }}"><button type="button" id="login-btn">MY PROFILE</button></a>
             {% endif %}

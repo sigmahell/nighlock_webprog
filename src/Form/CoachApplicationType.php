@@ -4,10 +4,12 @@ namespace App\Form;
 
 use App\Entity\Coach;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -38,10 +40,30 @@ class CoachApplicationType extends AbstractType
                     new Length(max: 100),
                 ],
             ])
-            ->add('hourlyRate', TextType::class, [
-                'label' => 'Hourly Rate',
+            ->add('imageFile', FileType::class, [
+                'label' => 'Profile Picture (Optional)',
+                'mapped' => false,
+                'required' => false,
                 'attr' => [
-                    'placeholder' => 'e.g. $20.00 / hr',
+                    'class' => 'form-input',
+                    'accept' => 'image/png,image/jpeg,image/webp',
+                ],
+                'constraints' => [
+                    new File(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        mimeTypesMessage: 'Please upload a valid JPG, PNG, or WEBP image under 5MB.',
+                    ),
+                ],
+            ])
+            ->add('hourlyRate', TextType::class, [
+                'label' => 'Hourly Rate (in PHP Pesos)',
+                'attr' => [
+                    'placeholder' => 'e.g. 500',
                     'class' => 'form-input',
                 ],
                 'constraints' => [
@@ -57,7 +79,7 @@ class CoachApplicationType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank(message: 'Please provide a brief bio describing your experience.'),
-                    new Length(min: 20, minMessage: 'Bio should be at least {{ limit }} characters.'),
+                    new Length(min: 5, max: 2000, minMessage: 'Bio should be at least {{ limit }} characters.'),
                 ],
             ]);
     }

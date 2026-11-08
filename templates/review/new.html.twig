@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Review Session with {{ coach.name }} - NightLock{% endblock %}
+
+{% block body %}
+<div style="max-width: 650px; margin: 0 auto; padding: 3rem 1.5rem;">
+
+    <nav style="margin-bottom: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+        <a href="{{ path('app_profile') }}" style="color: var(--accent-gold); text-decoration: none;">← Back to Profile</a>
+    </nav>
+
+    <h2 class="section-title" style="text-align: left;">LEAVE A REVIEW</h2>
+
+    {# Coach & Session Info #}
+    <div style="display: flex; align-items: center; gap: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
+        <img src="{{ coach.image ? asset('images/' ~ coach.image) : asset('images/default-avatar.png') }}" alt="{{ coach.name }}"
+             style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold);"
+             onerror="this.onerror=null; this.src='{{ asset('images/default-avatar.png') }}';">
+        <div>
+            <h3 style="margin: 0; color: #fff; font-size: 1.1rem;">{{ coach.name }}</h3>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">{{ booking.sessionTitle }}</span>
+            <div style="font-size: 0.8rem; color: var(--accent-gold); margin-top: 0.2rem;">
+                Completed on {{ booking.scheduledAt|date('M d, Y') }}
+            </div>
+        </div>
+    </div>
+
+    {# Review Form #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                {{ form_label(form.rating, 'Rating', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.rating) }}
+                {{ form_errors(form.rating) }}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                {{ form_label(form.comment, 'Your Feedback / Review', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.comment) }}
+                {{ form_errors(form.comment) }}
+                <small class="form-hint">Your review will be publicly visible to other players on the coach's profile and booking page.</small>
+            </div>
+
+            <button type="submit" class="book-btn" style="width: 100%; padding: 0.85rem; font-size: 0.95rem;">
+                SUBMIT REVIEW
+            </button>
+        {{ form_end(form) }}
+    </div>
+
+</div>
+{% endblock %}

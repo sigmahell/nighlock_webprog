@@ -49,12 +49,9 @@ final class BookingController extends AbstractController
             $booking->setCoach($coach);
             $booking->setStatus('pending');
 
-            // Snapshot the session title and price for history (even if session is later deleted)
-            $selectedSession = $booking->getSession();
-            if ($selectedSession) {
-                $booking->setSessionTitle($selectedSession->getTitle());
-                $booking->setPrice($selectedSession->getPrice());
-            }
+            // Set session title and price based on coach specialization and hourly rate
+            $booking->setSessionTitle(sprintf('1-on-1 %s Coaching', $coach->getSpecialization() ?? 'General'));
+            $booking->setPrice($coach->getHourlyRate() ?? '₱500/hr');
 
             $entityManager->persist($booking);
 

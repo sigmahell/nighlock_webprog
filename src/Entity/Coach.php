@@ -33,8 +33,8 @@ class Coach
     #[ORM\Column(length: 20)]
     private string $status = 'pending'; // 'pending', 'approved', 'rejected'
 
-    #[ORM\Column(length: 10)]
-    private string $rating = '10.0';
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $rating = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -60,11 +60,18 @@ class Coach
     #[ORM\OneToMany(mappedBy: 'coach', targetEntity: Booking::class, cascade: ['remove'])]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(mappedBy: 'coach', targetEntity: Review::class, cascade: ['remove'])]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->sessions = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,12 +134,12 @@ class Coach
         return $this;
     }
 
-    public function getRating(): string
+    public function getRating(): ?string
     {
         return $this->rating;
     }
 
-    public function setRating(string $rating): static
+    public function setRating(?string $rating): static
     {
         $this->rating = $rating;
         return $this;
@@ -215,5 +222,27 @@ class Coach
     public function getBookings(): Collection
     {
         return $this->bookings;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function getAverageRating(): ?float
+    {
+        if ($this->reviews->isEmpty()) {
+            return null;
+        }
+
+        $total = 0;
+        foreach ($this->reviews as $review) {
+            $total += $review->getRating();
+        }
+
+        return round($total / count($this->reviews), 1);
     }
 }

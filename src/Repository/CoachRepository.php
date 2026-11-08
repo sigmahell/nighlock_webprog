@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Coach;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -30,8 +31,7 @@ class CoachRepository extends ServiceEntityRepository
             ->andWhere('c.status = :status')
             ->setParameter('tier', $tier)
             ->setParameter('status', 'approved')
-            ->orderBy('c.rating', 'DESC')
-            ->addOrderBy('c.id', 'ASC')
+            ->orderBy('c.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -48,7 +48,7 @@ class CoachRepository extends ServiceEntityRepository
             ->addSelect('s')
             ->andWhere('c.status = :status')
             ->setParameter('status', 'approved')
-            ->orderBy('c.rating', 'DESC')
+            ->orderBy('c.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -66,5 +66,10 @@ class CoachRepository extends ServiceEntityRepository
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findOneByUser(User $user): ?Coach
+    {
+        return $this->findOneBy(['user' => $user]);
     }
 }

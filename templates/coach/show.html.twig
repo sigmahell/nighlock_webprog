@@ -3,6 +3,9 @@
 {% block title %}{{ coach.name }} - Coach Profile | NightLock{% endblock %}
 
 {% block body %}
+{% set is_own_profile = app.user and coach.user and app.user.id == coach.user.id %}
+{% set is_coach = app.user and app.user.coachProfile and app.user.coachProfile.status == 'approved' %}
+
 <div style="max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem;">
 
     {# ── BREADCRUMB ── #}
@@ -15,19 +18,13 @@
         {# Col 1: Avatar & identity #}
         <div class="featured-profile">
             {% if coach.image %}
-                <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}" class="featured-avatar">
+                <img src="{{ asset('images/' ~ coach.image) }}" alt="{{ coach.name }}" class="featured-avatar" onerror="this.onerror=null; this.src='{{ asset('images/default-avatar.png') }}';">
             {% else %}
-                <div class="featured-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:3rem;color:var(--accent-gold);">
-                    {{ coach.name|first|upper }}
-                </div>
+                <img src="{{ asset('images/default-avatar.png') }}" alt="{{ coach.name }}" class="featured-avatar">
             {% endif %}
 
             <h2 style="margin: 1rem 0 0.25rem; color: #fff;">{{ coach.name }}</h2>
             <span class="coach-meta">{{ coach.specialization }}</span>
-
-            <div style="margin-top: 0.75rem;">
-                <span style="color: var(--accent-gold); font-size: 1.1rem; font-weight: 700;">★ {{ coach.rating }}</span>
-            </div>
 
             <div style="margin-top: 0.5rem;">
                 <span class="badge-number1"
@@ -37,10 +34,20 @@
             </div>
 
             <p style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 700; margin-top: 1.25rem;">
-                {{ coach.hourlyRate ?? 'TBD' }}<span style="font-size: 0.8rem; color: var(--text-muted);"> / hr</span>
+                {{ coach.hourlyRate ?? 'TBD' }}{% if coach.hourlyRate and not ('/hr' in coach.hourlyRate) %}<span style="font-size: 0.8rem; color: var(--text-muted);"> / hr</span>{% endif %}
             </p>
 
-            {% if app.user %}
+            {% if is_own_profile %}
+                <a href="{{ path('app_coach_edit', {'id': coach.id}) }}"
+                   class="book-btn"
+                   style="width: 100%; text-align: center; margin-top: 1rem; font-size: 0.95rem; padding: 0.85rem; background: rgba(234,219,186,0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold);">
+                    EDIT YOUR PROFILE
+                </a>
+            {% elseif is_coach %}
+                <div style="margin-top: 1rem; padding: 0.75rem; text-align: center; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.825rem; color: var(--text-muted);">
+                    Signed in as Coach
+                </div>
+            {% elseif app.user %}
                 <a href="{{ path('app_booking_new', {'id': coach.id}) }}"
                    class="book-btn"
                    style="width: 100%; text-align: center; margin-top: 1rem; font-size: 1rem; padding: 0.85rem;">
@@ -61,35 +68,6 @@
             <p style="color: var(--text-muted); line-height: 1.75; font-size: 0.95rem;">
                 {{ coach.bio ?? 'This coach has not provided a bio yet.' }}
             </p>
-
-            {# ── COACHING PACKAGES ── #}
-            {% if coach.sessions is not empty %}
-                <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem;">COACHING PACKAGES</h3>
-                <div class="session-list">
-                    {% for session in coach.sessions %}
-                        <div class="session-row">
-                            <div class="session-info">
-                                <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem;">
-                                    {{ session.title }}
-                                </h4>
-                                <span class="sub-text">{{ session.durationMinutes }} minutes</span>
-                            </div>
-                            <div class="session-action">
-                                <span class="price-text">{{ session.price }}</span>
-                                {% if app.user %}
-                                    <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn">BOOK</a>
-                                {% else %}
-                                    <a href="{{ path('app_login') }}" class="book-btn" style="opacity: 0.65;">LOGIN</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p style="color: var(--text-muted); margin-top: 1.5rem; font-size: 0.9rem;">
-                    No coaching packages listed yet. Reach out to book a custom session.
-                </p>
-            {% endif %}
         </div>
 
         {# Col 3: Quick Stats #}
@@ -101,12 +79,19 @@
                     <strong style="color: #fff;">{{ coach.specialization }}</strong>
                 </div>
                 <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">RATING</span>
-                    <strong style="color: var(--accent-gold);">★ {{ coach.rating }}</strong>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">HOURLY RATE</span>
+                    <strong style="color: var(--accent-gold);">{{ coach.hourlyRate ?? 'TBD' }}</strong>
                 </div>
                 <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">PACKAGES AVAILABLE</span>
-                    <strong style="color: #fff;">{{ coach.sessions|length }}</strong>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">RATING</span>
+                    <strong style="color: #fff;">
+                        {% if coach.averageRating %}
+                            <span style="color: var(--accent-gold);">★ {{ coach.averageRating }}</span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">({{ coach.reviews|length }} review{{ coach.reviews|length == 1 ? '' : 's' }})</span>
+                        {% else %}
+                            <span style="color: var(--text-muted); font-weight: normal; font-size: 0.85rem;">No reviews yet</span>
+                        {% endif %}
+                    </strong>
                 </div>
                 <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
                     <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">MEMBER SINCE</span>
@@ -116,25 +101,48 @@
         </div>
     </div>
 
-    {# ── CALL TO ACTION ── #}
-    {% if app.user %}
-        <div style="text-align: center; padding: 2.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
-            <h3 style="color: var(--accent-gold); margin-bottom: 0.75rem;">READY TO LEVEL UP?</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
-                Book a session with <strong style="color: #fff;">{{ coach.name }}</strong> and start your journey to Immortal rank.
+    {# ── STUDENT REVIEWS SECTION ── #}
+    <div style="margin-top: 3rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.5rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.2rem; letter-spacing: 0.05em;">
+            STUDENT REVIEWS
+            {% if coach.reviews is not empty %}
+                <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: normal; margin-left: 0.5rem;">
+                    (★ {{ coach.averageRating }} avg &bull; {{ coach.reviews|length }} review{{ coach.reviews|length == 1 ? '' : 's' }})
+                </span>
+            {% endif %}
+        </h3>
+
+        {% if coach.reviews is empty %}
+            <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">
+                No reviews yet for this coach. Be the first to book a session and leave a review!
             </p>
-            <a href="{{ path('app_booking_new', {'id': coach.id}) }}" class="book-btn" style="font-size: 1rem; padding: 0.9rem 2.5rem;">
-                BOOK SESSION NOW
-            </a>
-        </div>
-    {% else %}
-        <div style="text-align: center; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">Log in to book a session with this coach.</p>
-            <a href="{{ path('app_login') }}" class="book-btn">LOG IN</a>
-            &nbsp;&nbsp;
-            <a href="{{ path('app_register') }}" class="book-btn" style="background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold);">REGISTER</a>
-        </div>
-    {% endif %}
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                {% for review in coach.reviews %}
+                    <div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <div>
+                                <span style="color: #fff; font-weight: 600; font-size: 0.95rem;">
+                                    {{ review.client.steamName ?? review.client.email }}
+                                </span>
+                                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">
+                                    {{ review.createdAt|date('M d, Y') }}
+                                </span>
+                            </div>
+                            <div style="color: var(--accent-gold); font-size: 0.95rem;">
+                                {% for i in 1..5 %}
+                                    {% if i <= review.rating %}★{% else %}☆{% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            {{ review.comment }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 
 </div>
 {% endblock %}

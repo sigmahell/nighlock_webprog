@@ -18,3 +18,9 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# User-uploaded coach images
+/public/images/coach_*
+!/public/images/default-avatar.png
+!/public/images/placeholder-avatar.png
+

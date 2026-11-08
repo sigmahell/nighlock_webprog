@@ -3,10 +3,11 @@
 {% block title %}Admin Dashboard - NightLock{% endblock %}
 
 {% block body %}
-<div style="max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem;">
+<div style="max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem;">
     <h2 class="section-title">ADMINISTRATOR OCCULT CONTROL</h2>
 
-    <div class="admin-stats-grid">
+    {# ── KPI STATS CARDS ── #}
+    <div class="admin-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
         <div class="stat-card">
             <h4>Total Users</h4>
             <div class="stat-number">{{ stats.total_users }}</div>
@@ -20,33 +21,216 @@
             <div class="stat-number color-approved" style="color: #4caf50;">{{ stats.completed_sessions }}</div>
         </div>
         <div class="stat-card">
-            <h4>Registered Coaches</h4>
+            <h4>Approved Coaches</h4>
             <div class="stat-number">{{ stats.registered_coaches }}</div>
+        </div>
+        <div class="stat-card">
+            <h4>Total Reviews</h4>
+            <div class="stat-number" style="color: var(--accent-gold);">{{ stats.total_reviews }}</div>
         </div>
     </div>
 
-    <h3 style="color: var(--accent-gold); margin: 2rem 0 1rem 0; font-size: 1.2rem;">RECENT INQUIRIES</h3>
-    <div class="admin-table-wrapper">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Sender</th>
-                    <th>Email</th>
-                    <th>Inquiry Details</th>
-                    <th>Received</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for inquiry in inquiries %}
-                    <tr>
-                        <td style="font-weight: 600; color: #fff;">{{ inquiry.name }}</td>
-                        <td style="color: var(--accent-gold);">{{ inquiry.email }}</td>
-                        <td style="color: var(--text-muted);">{{ inquiry.message }}</td>
-                        <td style="color: var(--text-muted); font-size: 0.85rem;">{{ inquiry.date }}</td>
+    {# ── SECTION 1: PENDING COACH APPLICATIONS ── #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.25rem; font-size: 1.15rem; letter-spacing: 0.05em;">
+            PENDING COACH APPLICATIONS ({{ pending_applications|length }})
+        </h3>
+        <div class="admin-table-wrapper" style="overflow-x: auto;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                        <th style="padding: 0.75rem;">Applicant</th>
+                        <th style="padding: 0.75rem;">Specialization</th>
+                        <th style="padding: 0.75rem;">Hourly Rate</th>
+                        <th style="padding: 0.75rem;">Bio</th>
+                        <th style="padding: 0.75rem;">Applied</th>
+                        <th style="padding: 0.75rem;">Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for coach in pending_applications %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 0.75rem; font-weight: 600; color: #fff;">
+                                {{ coach.name }}
+                                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">
+                                    {{ coach.user ? coach.user.email : 'No linked user' }}
+                                </div>
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--accent-gold);">{{ coach.specialization }}</td>
+                            <td style="padding: 0.75rem; color: var(--text-muted);">{{ coach.hourlyRate }}</td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem; max-width: 300px;">
+                                {{ coach.bio|slice(0, 80) }}{% if coach.bio|length > 80 %}...{% endif %}
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">{{ coach.createdAt|date('M d, Y') }}</td>
+                            <td style="padding: 0.75rem;">
+                                <div style="display: flex; gap: .5rem;">
+                                    {% for decision, label in {'approve': 'Approve', 'reject': 'Reject'} %}
+                                        <form method="post" action="{{ path('app_admin_coach_application_decision', {id: coach.id, decision: decision}) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('coach_application_' ~ coach.id) }}">
+                                            <button type="submit" class="book-btn" style="border: none; cursor: pointer; padding: 4px 12px; font-size: 0.8rem; {% if decision == 'reject' %}background: rgba(231,76,60,.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3);{% endif %}">{{ label }}</button>
+                                        </form>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="color: var(--text-muted); text-align: center; padding: 2rem;">No coach applications are waiting for review.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    {# ── SECTION 2: USER & ROLE MANAGEMENT ── #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.25rem; font-size: 1.15rem; letter-spacing: 0.05em;">
+            USER & ROLE MANAGEMENT ({{ users|length }})
+        </h3>
+        <div class="admin-table-wrapper" style="overflow-x: auto;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                        <th style="padding: 0.75rem;">Email</th>
+                        <th style="padding: 0.75rem;">Steam Name</th>
+                        <th style="padding: 0.75rem;">Coach Status</th>
+                        <th style="padding: 0.75rem;">Roles</th>
+                        <th style="padding: 0.75rem;">Joined</th>
+                        <th style="padding: 0.75rem;">Admin Access</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                        {% set is_admin = 'ROLE_ADMIN' in u.roles %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 0.75rem; font-weight: 600; color: #fff;">
+                                {{ u.email }}
+                                {% if u == app.user %}
+                                    <span style="font-size: 0.7rem; background: rgba(234,219,186,0.2); color: var(--accent-gold); padding: 1px 6px; border-radius: 3px; margin-left: 0.4rem;">YOU</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--text-muted);">{{ u.steamName ?? '—' }}</td>
+                            <td style="padding: 0.75rem;">
+                                {% if u.coachProfile %}
+                                    <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 600; {% if u.coachProfile.status == 'approved' %}background: rgba(46,204,113,0.15); color: #2ecc71;{% elseif u.coachProfile.status == 'pending' %}background: rgba(243,156,18,0.15); color: #f39c12;{% else %}background: rgba(231,76,60,0.15); color: #e74c3c;{% endif %}">
+                                        {{ u.coachProfile.status }} Coach
+                                    </span>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-size: 0.85rem;">User</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.75rem; font-size: 0.8rem; color: var(--accent-gold);">
+                                {{ u.roles|join(', ') }}
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">{{ u.createdAt|date('M d, Y') }}</td>
+                            <td style="padding: 0.75rem;">
+                                {% if u != app.user %}
+                                    <form method="post" action="{{ path('app_admin_user_toggle_role', {id: u.id}) }}" onsubmit="return confirm('Change administrator role for {{ u.email }}?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_role_' ~ u.id) }}">
+                                        <button type="submit" style="cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; border: none; {% if is_admin %}background: rgba(231,76,60,0.15); color: #e74c3c;{% else %}background: rgba(234,219,186,0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold);{% endif %}">
+                                            {{ is_admin ? 'Revoke Admin' : 'Grant Admin' }}
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-size: 0.75rem;">Current Account</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# ── SECTION 3: RECENT BOOKINGS MONITOR ── #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.25rem; font-size: 1.15rem; letter-spacing: 0.05em;">
+            SESSIONS & BOOKINGS ({{ all_bookings|length }})
+        </h3>
+        <div class="admin-table-wrapper" style="overflow-x: auto;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                        <th style="padding: 0.75rem;">Client</th>
+                        <th style="padding: 0.75rem;">Coach</th>
+                        <th style="padding: 0.75rem;">Session Title</th>
+                        <th style="padding: 0.75rem;">Price</th>
+                        <th style="padding: 0.75rem;">Scheduled For</th>
+                        <th style="padding: 0.75rem;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in all_bookings %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 0.75rem; color: #fff;">{{ b.client ? (b.client.steamName ?? b.client.email) : 'Unknown' }}</td>
+                            <td style="padding: 0.75rem; color: var(--accent-gold);">{{ b.coach ? b.coach.name : 'Unknown' }}</td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">{{ b.sessionTitle }}</td>
+                            <td style="padding: 0.75rem; color: #fff; font-weight: 600;">{{ b.price }}</td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">{{ b.scheduledAt|date('M d, Y H:i') }}</td>
+                            <td style="padding: 0.75rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; {% if b.status == 'completed' %}background: rgba(76,175,80,0.15); color: #4caf50;{% elseif b.status == 'accepted' %}background: rgba(46,204,113,0.15); color: #2ecc71;{% elseif b.status == 'pending' %}background: rgba(243,156,18,0.15); color: #f39c12;{% else %}background: rgba(231,76,60,0.15); color: #e74c3c;{% endif %}">
+                                    {{ b.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="color: var(--text-muted); text-align: center; padding: 2rem;">No bookings recorded yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# ── SECTION 4: REVIEW & CONTENT MODERATION ── #}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem;">
+        <h3 style="color: var(--accent-gold); margin-top: 0; margin-bottom: 1.25rem; font-size: 1.15rem; letter-spacing: 0.05em;">
+            REVIEW MODERATION ({{ recent_reviews|length }})
+        </h3>
+        <div class="admin-table-wrapper" style="overflow-x: auto;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                        <th style="padding: 0.75rem;">Client</th>
+                        <th style="padding: 0.75rem;">Coach</th>
+                        <th style="padding: 0.75rem;">Rating</th>
+                        <th style="padding: 0.75rem;">Feedback Comment</th>
+                        <th style="padding: 0.75rem;">Date</th>
+                        <th style="padding: 0.75rem;">Moderation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in recent_reviews %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 0.75rem; color: #fff;">{{ r.client ? (r.client.steamName ?? r.client.email) : 'Unknown' }}</td>
+                            <td style="padding: 0.75rem; color: var(--accent-gold);">{{ r.coach ? r.coach.name : 'Unknown' }}</td>
+                            <td style="padding: 0.75rem; color: var(--accent-gold); font-size: 0.85rem;">
+                                {% for i in 1..5 %}{% if i <= r.rating %}★{% else %}☆{% endif %}{% endfor %}
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem; max-width: 400px;">
+                                {{ r.comment }}
+                            </td>
+                            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">{{ r.createdAt|date('M d, Y') }}</td>
+                            <td style="padding: 0.75rem;">
+                                <form method="post" action="{{ path('app_admin_review_delete', {id: r.id}) }}" onsubmit="return confirm('Are you sure you want to delete this review?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_review_' ~ r.id) }}">
+                                    <button type="submit" style="cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3);">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="color: var(--text-muted); text-align: center; padding: 2rem;">No student reviews have been posted yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-# Enable stateless CSRF protection for forms and logins/logouts
+# Stateless CSRF configuration
 framework:
     form:
         csrf_protection:
@@ -7,5 +7,4 @@ framework:
     csrf_protection:
         stateless_token_ids:
             - submit
-            - authenticate
-            - logout
+

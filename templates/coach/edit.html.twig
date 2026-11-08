@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Coach Profile{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Edit Your Profile</h2>
+
+    {% for message in app.flashes('error') %}
+        <div style="background: rgba(220,53,69,0.15); border: 1px solid #dc3545; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; color: #ff6b6b; font-size: 0.9rem;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div style="background: rgba(40,167,69,0.15); border: 1px solid #28a745; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; color: #51cf66; font-size: 0.9rem;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(edit_form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        {{ form_row(edit_form.name) }}
+        {{ form_row(edit_form.specialization) }}
+        {{ form_row(edit_form.bio) }}
+        {{ form_row(edit_form.hourlyRate) }}
+
+        <div style="margin-top: 1.25rem;">
+            {{ form_label(edit_form.imageFile) }}
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem;">
+                Only PNG files are accepted. Leave blank to keep your current photo.
+            </p>
+            {{ form_widget(edit_form.imageFile) }}
+            {{ form_errors(edit_form.imageFile) }}
+        </div>
+
+        <button class="book-btn" style="margin-top: 1.5rem; width: 100%;" type="submit">Save Changes</button>
+    {{ form_end(edit_form) }}
+</div>
+{% endblock %}

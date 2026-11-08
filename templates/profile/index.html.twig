@@ -95,6 +95,21 @@
                             </span>
                         {% endif %}
 
+                        {# Review Button for Completed Sessions #}
+                        {% if booking.status == 'completed' %}
+                            {% if booking.review %}
+                                <span style="font-size: 0.8rem; color: #2ecc71; background: rgba(46,204,113,0.1); padding: 4px 10px; border-radius: 4px;">
+                                    ★ {{ booking.review.rating }}/5 Reviewed
+                                </span>
+                            {% else %}
+                                <a href="{{ path('app_booking_review', {'id': booking.id}) }}"
+                                   class="book-btn"
+                                   style="padding: 4px 12px; font-size: 0.8rem; text-decoration: none;">
+                                    ★ Leave Review
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
                         {# Only show cancel for pending or accepted bookings #}
                         {% if booking.status in ['pending', 'accepted'] %}
                             <form method="post"

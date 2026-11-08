@@ -22,28 +22,6 @@ class BookingType extends AbstractType
         $coach = $options['coach'];
 
         $builder
-            ->add('session', EntityType::class, [
-                'class' => CoachSession::class,
-                'choice_label' => function (CoachSession $session) {
-                    return sprintf('%s (%d mins) - %s', $session->getTitle(), $session->getDurationMinutes(), $session->getPrice());
-                },
-                'placeholder' => '-- Select a Coaching Package --',
-                'required' => true,
-                'query_builder' => function (EntityRepository $er) use ($coach) {
-                    $qb = $er->createQueryBuilder('s');
-                    if ($coach instanceof Coach) {
-                        $qb->andWhere('s.coach = :coach')
-                           ->setParameter('coach', $coach);
-                    }
-                    return $qb->orderBy('s.price', 'ASC');
-                },
-                'attr' => [
-                    'class' => 'form-input',
-                ],
-                'constraints' => [
-                    new NotBlank(message: 'Please select a session package.'),
-                ],
-            ])
             ->add('scheduledAt', DateTimeType::class, [
                 'label' => 'Session Schedule (Date & Time)',
                 'widget' => 'single_text',
